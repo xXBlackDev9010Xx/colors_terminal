@@ -1,5 +1,6 @@
 class Colors:
     # Define ANSI escape codes for various text styles and colors
+    # Define constants for different text styles and colors using ANSI escape codes
     RESET = "\033[0m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
@@ -29,20 +30,19 @@ class Colors:
     
     @staticmethod
     def print(text, color="", style=""):
-        # Convert color and style to lowercase for consistency
-        color = color.lower()
-        style = style.lower()
-
-         # Check if the color and style are valid
+        # Check if the color and style are valid
         valid_colors = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
         valid_styles = ['bold', 'dim', 'italic', 'underline', 'blink', 'reverse', 'hidden']
-        if color not in valid_colors and style not in valid_styles:
+        if color.lower() not in valid_colors and (style is None or style.lower() not in valid_styles) and style != "":
+            # Print an error message if the specified color and style are invalid
             print(f"{Colors.RED}{Colors.BOLD}ERROR: Invalid color and style specified: '{color}' and '{style}'{Colors.RESET}")
             return
-        elif color not in valid_colors:
+        elif color.lower() not in valid_colors:
+            # Print an error message if the specified color is invalid
             print(f"{Colors.RED}{Colors.BOLD}ERROR: Invalid color specified: '{color}'{Colors.RESET}")
             return
-        elif style not in valid_styles:
+        elif (style is not None and style.lower() not in valid_styles) and style != "":
+            # Print an error message if the specified style is invalid
             print(f"{Colors.RED}{Colors.BOLD}ERROR: Invalid style specified: '{style}'{Colors.RESET}")
             return
 
@@ -58,17 +58,19 @@ class Colors:
             return
         
         # Get the ANSI escape code for the specified style (if one was specified), or leave it blank if not
-        try:
-            style_code = getattr(Colors, style)
-        except AttributeError:
-            # If the specified style doesn't exist, raise a custom exception with a suggestion for a similar style (if available)
-            if style.upper() in dir(Colors):
-                print(f'{Colors.RED}{Colors.BOLD}ERROR: Invalid style specified: "{style}" (did you mean "{style.upper()}"?) {Colors.RESET}')
-            else:
-                print(f'{Colors.RED}{Colors.BOLD}ERROR: Invalid style specified: "{style}"{Colors.RESET}')
-            return
+        if style is None or style == "":
+            style_code = ""
+        else:
+            try:
+                style_code = getattr(Colors, style)
+            except AttributeError:
+                # If the specified style doesn't exist, raise a custom exception with a suggestion for a similar style (if available)
+                if style.upper() in dir(Colors):
+                    print(f'{Colors.RED}{Colors.BOLD}ERROR: Invalid style specified: "{style}" (did you mean "{style.upper()}"?) {Colors.RESET}')
+                else:
+                    print(f'{Colors.RED}{Colors.BOLD}ERROR: Invalid style specified: "{style}"{Colors.RESET}')
+                return
 
         # Print the text with the specified color and style, and then reset the color back to the default value at the end
         print(f"{style_code}{color_code}{text}{Colors.RESET}")
-
 # Copyright © 2023 xXBlackDev9010Xx

@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="Colors-Terminal",
-    version="0.0.3",
+    version="0.0.4",
     author="xXBlackDev9010Xx",
     author_email="tecnoblue9010@gmail.com",
     description="colors_terminal this tool help decorate your terminal in Python fast and easy :)",
